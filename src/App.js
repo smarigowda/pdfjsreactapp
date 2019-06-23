@@ -4,6 +4,7 @@ import "./App.css";
 import PDFMasker from "./modules/PDFMasker";
 
 let scale = 1;
+let fr = new FileReader();
 
 console.log("pdfjsLib = ", window.pdfjsLib);
 console.log("jsPDF = ", window.jsPDF);
@@ -23,7 +24,6 @@ function handleChange() {
   console.log("file chosen...");
   const fileList = this.files; /* now you can work with the file list */
   console.log(fileList);
-  let fr = new FileReader();
   async function receivedPdf(e) {
     console.log("file loaded...");
     console.log(e);
@@ -34,21 +34,24 @@ function handleChange() {
     const pdfMasker = new PDFMasker(
       "A Module to abstract PDF Masking....",
       window.pdfjsLib,
-      window.jsPDF,
       fileDataURL
     );
     pdfMasker.printTitle();
     let pdfDoc = await pdfMasker.init();
 
-    for (let count = 1; count <= pdfMasker.numPages; count++) {
+    let count;
+    for (count = 1; count <= pdfMasker.numPages; count++) {
+      // add a new page
+      if (count !== 1) {
+        newPdf.addPage();
+      }
       // debugger;
       let canvas = addANewCanvas(count);
       const ctx = canvas.getContext("2d");
       console.log("Render Page...", count);
       // get a page from the pdfDoc
       const page = await pdfDoc.getPage(count);
-      // add a new page
-      newPdf.addPage();
+
       // render a page
       const viewport = page.getViewport({ scale: scale });
       canvas.height = viewport.height;
@@ -57,28 +60,23 @@ function handleChange() {
         canvasContext: ctx,
         viewport: viewport
       };
-      const renderTask = await page.render(renderContext).promise;
+      await page.render(renderContext).promise;
       // ctx.fillStyle = "white";
       // ctx.fillRect(0, 0, 2000, 20);
-      // newPdf.addImage(
-      //   canvas.toDataURL("image/png"),
-      //   "PNG",
-      //   0,
-      //   0,
-      //   viewport.width,
-      //   viewport.height,
-      //   "",
-      //   "FAST"
-      // );
+      newPdf.addImage(
+        canvas.toDataURL("image/png"),
+        "PNG",
+        0,
+        0,
+        viewport.width,
+        viewport.height,
+        "",
+        "FAST"
+      );
     }
-    // newPdf.save(`pdfFileName`);
-
-    // render a Save button after all pages are rendered.
-
-    // when the save button is clicked, save the pdf file.
+    newPdf.save(`${fileList[0].name}`);
   }
   fr.onload = receivedPdf;
-  //fr.readAsText(file);
   fr.readAsDataURL(fileList[0]);
 }
 
