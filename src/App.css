@@ -31,3 +31,97 @@
     transform: rotate(360deg);
   }
 }
+
+canvas {
+  display: block;
+  margin: 0 auto;
+  border: solid 1px black;
+}
+
+.container {
+    display: block;
+    margin: 0 auto;
+    width: 30%;
+}
+
+#header_mask_height, #detail_mask_top {
+    font-size: 3rem;
+}
+label {
+    font-size: 2rem;
+}
+button {
+    font-size: 2rem;
+}
+input {
+    font-size: 1.2rem;
+}
+#save-button {
+    padding: 1rem;
+    background-color: white;
+    color: red;
+    border-radius: 3px;
+}
+#save-button:focus {
+    outline: none;
+}
+#save-button:hover {
+    background-color: orangered;
+    color: white;
+    cursor: pointer;
+    border: solid black 1px;
+}
+
+#render-again,#refresh {
+    background-color: orangered;
+    padding: 1rem;
+    color: white;
+    border-radius: 3px;
+    display: none;
+}
+#render-again:focus {
+    outline: none;
+}
+#render-again:hover {
+    background-color: white;
+    color: red;
+    cursor: pointer;
+}
+
+.inputfile {
+	/* width: 0.1px; */
+	/* height: 0.1px; */
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.inputfile + label {
+    font-size: 2rem;
+    font-weight: 200;
+    color: white;
+    background-color: black;
+    display: block;
+    padding: 1rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    border-radius: 3px;
+    text-align: center;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: red;
+}
+
+.inputfile + label {
+	cursor: pointer; /* "hand" cursor */
+}
+
+.input-container {
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+}

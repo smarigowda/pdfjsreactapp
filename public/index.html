@@ -40,5 +40,25 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <div class="container">
+      <div class="input-container">
+          <input type="file" name="file" id="file" class="inputfile">
+          <label for="file">Choose a file</label>
+      </div>
+      <div>
+            <label for="">Height of header Mask</label>
+            <input id="header_mask_height" type="number" value="85"></input>
+        </div>
+      <div>
+          <label for="">Top of detail mask</label>
+          <input id="detail_mask_top" type="number" value="300"></input>
+      </div>
+      <div>
+          <button id="render-again">Render Again...</button>
+      </div>
+      <div>
+        <button id="refresh">Refresh...</button>
+    </div>
+  </div>
   </body>
 </html>
