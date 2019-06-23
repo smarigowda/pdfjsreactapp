@@ -3,11 +3,23 @@ import "./App.css";
 
 import PDFMasker from "./modules/PDFMasker";
 
+let scale = 1;
+
 console.log("pdfjsLib = ", window.pdfjsLib);
 console.log("jsPDF = ", window.jsPDF);
 
 const inputfile = document.querySelector(".inputfile");
-inputfile.addEventListener("change", function() {
+const newPdf = new window.jsPDF("p", "pt", "a4", true);
+
+function addANewCanvas(num) {
+  const canvasElement = document.createElement("canvas");
+  canvasElement.setAttribute("id", `the-canvas-${num}`);
+  canvasElement.setAttribute("class", `the-canvas`);
+  document.body.appendChild(canvasElement);
+  return canvasElement;
+}
+
+function handleChange() {
   console.log("file chosen...");
   const fileList = this.files; /* now you can work with the file list */
   console.log(fileList);
@@ -26,12 +38,51 @@ inputfile.addEventListener("change", function() {
       fileDataURL
     );
     pdfMasker.printTitle();
-    pdfMasker.getDocument();
+    let pdfDoc = await pdfMasker.init();
+
+    for (let count = 1; count <= pdfMasker.numPages; count++) {
+      // debugger;
+      let canvas = addANewCanvas(count);
+      const ctx = canvas.getContext("2d");
+      console.log("Render Page...", count);
+      // get a page from the pdfDoc
+      const page = await pdfDoc.getPage(count);
+      // add a new page
+      newPdf.addPage();
+      // render a page
+      const viewport = page.getViewport({ scale: scale });
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+      const renderContext = {
+        canvasContext: ctx,
+        viewport: viewport
+      };
+      const renderTask = await page.render(renderContext).promise;
+      // ctx.fillStyle = "white";
+      // ctx.fillRect(0, 0, 2000, 20);
+      // newPdf.addImage(
+      //   canvas.toDataURL("image/png"),
+      //   "PNG",
+      //   0,
+      //   0,
+      //   viewport.width,
+      //   viewport.height,
+      //   "",
+      //   "FAST"
+      // );
+    }
+    // newPdf.save(`pdfFileName`);
+
+    // render a Save button after all pages are rendered.
+
+    // when the save button is clicked, save the pdf file.
   }
   fr.onload = receivedPdf;
   //fr.readAsText(file);
   fr.readAsDataURL(fileList[0]);
-});
+}
+
+inputfile.addEventListener("change", handleChange);
 console.log("document", document.querySelector(".inputfile"));
 
 function App() {
