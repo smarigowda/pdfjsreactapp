@@ -1,8 +1,12 @@
 export default class PDFMasker {
-    constructor(title) {
-        this.title = title;
-    }
-    printTitle() {
-        console.log(this.title);
-    }
+  constructor(title, pdfjsLib, jspdf, fileDataURL) {
+    this.title = title;
+    this.pdfjsLib = pdfjsLib;
+    this.jspdf = jspdf;
+    this.fileDataURL = fileDataURL;
+  }
+  printTitle() {
+    console.log(this.title);
+    console.log(this.fileDataURL);
+  }
 }
