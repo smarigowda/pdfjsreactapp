@@ -12,7 +12,7 @@ inputfile.addEventListener("change", function() {
   const fileList = this.files; /* now you can work with the file list */
   console.log(fileList);
   let fr = new FileReader();
-  function receivedPdf(e) {
+  async function receivedPdf(e) {
     console.log("file loaded...");
     console.log(e);
     console.log("file reader instance...");
@@ -26,6 +26,7 @@ inputfile.addEventListener("change", function() {
       fileDataURL
     );
     pdfMasker.printTitle();
+    pdfMasker.getDocument();
   }
   fr.onload = receivedPdf;
   //fr.readAsText(file);
