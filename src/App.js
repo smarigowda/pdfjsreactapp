@@ -6,12 +6,25 @@ import PDFMasker from "./modules/PDFMasker";
 let scale = 1;
 let fr = new FileReader();
 let fileList;
+let masks;
 
 console.log("pdfjsLib = ", window.pdfjsLib);
 console.log("jsPDF = ", window.jsPDF);
 
 const inputfile = document.querySelector(".inputfile");
 const newPdf = new window.jsPDF("p", "pt", "a4", true);
+
+function getMasks() {
+  const maskTop = document.getElementById("detail_mask_top");
+  console.dir(maskTop);
+  console.log("valueAsNumber", maskTop.valueAsNumber);
+  let detailMaskTop = maskTop.valueAsNumber;
+
+  const headerMask = document.getElementById("header_mask_height");
+  console.log(headerMask);
+  let headerMaskHeight = headerMask.valueAsNumber;
+  return { headerMaskHeight, detailMaskTop }
+}
 
 function addANewCanvas(num) {
   const canvasElement = document.createElement("canvas");
@@ -20,7 +33,6 @@ function addANewCanvas(num) {
   document.body.appendChild(canvasElement);
   return canvasElement;
 }
-
 function handleChange() {
   console.log("file chosen...");
   fileList = this.files; /* now you can work with the file list */
@@ -28,7 +40,6 @@ function handleChange() {
   fr.onload = () => { processPdf() };
   fr.readAsDataURL(fileList[0]);
 }
-
 async function processPdf() {
   console.log("file loaded...");
   // console.log(e);
@@ -67,8 +78,14 @@ async function processPdf() {
       viewport: viewport
     };
     await page.render(renderContext).promise;
-    // ctx.fillStyle = "white";
-    // ctx.fillRect(0, 0, 2000, 20);
+    ctx.fillStyle = "white";
+    if(count === 1) {
+      console.log('masks = ', masks);
+      masks = getMasks();
+      ctx.fillRect(0, masks.detailMaskTop, 2000, 2000);
+    }
+    ctx.fillRect(0, 0, 2000, masks.headerMaskHeight);
+
     newPdf.addImage(
       canvas.toDataURL("image/png"),
       "PNG",
