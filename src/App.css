@@ -44,7 +44,7 @@ canvas {
     width: 30%;
 }
 
-#header_mask_height, #detail_mask_top {
+#header_mask_height, #detail_mask_top, #footer_mask_top {
     font-size: 3rem;
 }
 label {

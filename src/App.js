@@ -3,7 +3,7 @@ import "./App.css";
 
 import PDFMasker from "./modules/PDFMasker";
 
-let scale = 1;
+let scale = 1.0;
 let fr = new FileReader();
 let fileList;
 let masks;
@@ -23,9 +23,11 @@ function getMasks() {
   const headerMask = document.getElementById("header_mask_height");
   console.log(headerMask);
   let headerMaskHeight = headerMask.valueAsNumber;
-  return { headerMaskHeight, detailMaskTop }
-}
 
+  const footerMaskTop = document.getElementById("footer_mask_top").valueAsNumber;
+
+  return { headerMaskHeight, detailMaskTop, footerMaskTop };
+}
 function addANewCanvas(num) {
   const canvasElement = document.createElement("canvas");
   canvasElement.setAttribute("id", `the-canvas-${num}`);
@@ -37,7 +39,9 @@ function handleChange() {
   console.log("file chosen...");
   fileList = this.files; /* now you can work with the file list */
   console.log(fileList);
-  fr.onload = () => { processPdf() };
+  fr.onload = () => {
+    processPdf();
+  };
   fr.readAsDataURL(fileList[0]);
 }
 async function processPdf() {
@@ -79,12 +83,13 @@ async function processPdf() {
     };
     await page.render(renderContext).promise;
     ctx.fillStyle = "white";
-    if(count === 1) {
-      console.log('masks = ', masks);
+    if (count === 1) {
+      console.log("masks = ", masks);
       masks = getMasks();
       ctx.fillRect(0, masks.detailMaskTop, 2000, 2000);
     }
     ctx.fillRect(0, 0, 2000, masks.headerMaskHeight);
+    ctx.fillRect(0, masks.footerMaskTop, 2000, 2000);
 
     newPdf.addImage(
       canvas.toDataURL("image/png"),
