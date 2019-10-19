@@ -3,7 +3,7 @@ import "./App.css";
 
 import PDFMasker from "./modules/PDFMasker";
 
-let scale = 1.0;
+let scale = 1;
 let fr = new FileReader();
 let fileList;
 let masks;
@@ -24,7 +24,8 @@ function getMasks() {
   console.log(headerMask);
   let headerMaskHeight = headerMask.valueAsNumber;
 
-  const footerMaskTop = document.getElementById("footer_mask_top").valueAsNumber;
+  const footerMaskTop = document.getElementById("footer_mask_top")
+    .valueAsNumber;
 
   return { headerMaskHeight, detailMaskTop, footerMaskTop };
 }
@@ -75,8 +76,8 @@ async function processPdf() {
 
     // render a page
     const viewport = page.getViewport({ scale: scale });
-    canvas.height = viewport.height;
-    canvas.width = viewport.width;
+    canvas.height = viewport.height * scale;
+    canvas.width = viewport.width * scale;
     const renderContext = {
       canvasContext: ctx,
       viewport: viewport
